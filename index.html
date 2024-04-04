@@ -11,24 +11,38 @@
             font-family: Arial, sans-serif;
         }
 
+        .title {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .urban {
+            font-size: 24px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .location-year {
+            font-size: 14px;
+            font-weight: normal;
+        }
+
         .navbar {
             background-color: black;
             color: white;
-            padding: 10px 0;
+            padding: 10px 20px;
             position: fixed;
             top: 0;
             width: 100%;
             height: 60px;
             display: flex;
-            justify-content: center; /* Center horizontally */
+            justify-content: left; /* Center horizontally */
             align-items: center;
             z-index: 1000; /* Ensure navbar stays on top */
         }
 
-        .navbar-text {
-            font-family: "Century Gothic", sans-serif;
-            font-size: 18px;
-        }
 
         .gallery-container {
             display: grid;
@@ -55,18 +69,15 @@
         .popup {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* Ensure popup is below navbar and footer */
+            width: 80%;
+            max-width: 800px;
         }
 
         .popup-content {
-            max-width: 80%;
-            max-height: 80%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -88,6 +99,21 @@
             font-size: 24px;
         }
 
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            color: black;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .footer-text {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 18px;
+        }
+
         /* Responsive Styles */
         @media screen and (max-width: 768px) {
             .gallery-container {
@@ -99,12 +125,29 @@
             .gallery-container {
                 grid-template-columns: 1fr;
             }
+
+            .urban {
+                font-size: 20px;
+            }
+
+            .location-year {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <span class="navbar-text">urban design 2017 tripunithura</span>
+    <div class="title">
+        <span class="urban">URBAN DESIGN</span>
+        <span class="location-year">Thripunithura 2017</span>
+    </div>
+    <div class="popup" id="popup">
+        <span class="close-button" onclick="closePopup()">×</span>
+        <div class="popup-content">
+            <img id="popup-image" src="" alt="Popup Image">
+        </div>
+    </div>
 </div>
 
 <div class="gallery-container">
@@ -146,12 +189,10 @@
     </div>
 </div>
 
-<div class="popup" id="popup">
-    <span class="close-button" onclick="closePopup()">×</span>
-    <div class="popup-content">
-        <img id="popup-image" src="" alt="Popup Image">
-    </div>
-</div>
+
+<footer class="footer">
+    <span class="footer-text">meera ramesh</span>
+</footer>
 
 <script>
     const galleryItems = document.querySelectorAll('.gallery-item');
@@ -172,7 +213,7 @@
 
     window.onclick = function (event) {
         if (event.target == popup) {
-            popup.style.display = 'none';
+            closePopup();
         }
     };
 </script>
