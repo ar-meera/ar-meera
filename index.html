@@ -11,12 +11,32 @@
             font-family: Arial, sans-serif;
         }
 
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center;
+            z-index: 1000; /* Ensure navbar stays on top */
+        }
+
+        .navbar-text {
+            font-family: "Century Gothic", sans-serif;
+            font-size: 18px;
+        }
+
         .gallery-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             padding: 20px;
             overflow: auto;
+            margin-top: 85px;
         }
 
         .gallery-item {
@@ -83,6 +103,9 @@
     </style>
 </head>
 <body>
+<div class="navbar">
+    <span class="navbar-text">urban design 2017 tripunithura</span>
+</div>
 
 <div class="gallery-container">
     <div class="gallery-item">
