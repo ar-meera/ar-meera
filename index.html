@@ -1,242 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meera Urban Design</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Century Gothic", sans-serif;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meera — Urban Design (Optimized)</title>
+  <style>
+    :root{--nav-height:64px;--g-gap:18px;--bg:#0b0b0b}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Century Gothic,Segoe UI,Arial,sans-serif}
 
-        .title {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+    /* NAVBAR */
+    .navbar{position:fixed;top:0;left:0;right:0;height:var(--nav-height);display:flex;align-items:center;gap:14px;padding:0 20px;background:rgba(0,0,0,0.95);z-index:1000}
+    .title{display:flex;flex-direction:column}
+    .urban{font-size:20px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+    .location-year{font-size:13px;opacity:0.9}
 
-        .urban {
-            font-size: 24px;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-right: 5px;
-        }
+    /* GALLERY */
+    .gallery-wrap{padding:calc(var(--nav-height) + 20px) 18px 100px;max-width:1400px;margin:0 auto}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--g-gap)}
+    .gallery-item{position:relative;height:220px;overflow:hidden;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.6);background:#111}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;pointer-events:none}
+    /* click-overlay to block right-click/save directly on thumbnails */
+    .click-overlay{position:absolute;inset:0;z-index:2;background:transparent}
 
-        .location-year {
-            font-size: 14px;
-            font-weight: normal;
-        }
+    /* popup */
+    .popup{display:none;position:fixed;inset:0;align-items:center;justify-content:center;padding:20px;z-index:2000}
+    .popup.visible{display:flex;background:linear-gradient(180deg,rgba(0,0,0,0.65),rgba(0,0,0,0.9))}
+    .popup-content{position:relative;max-width:1100px;width:100%;max-height:90vh;display:flex;align-items:center;justify-content:center}
+    .popup-image{max-width:100%;max-height:100%;border:6px solid #fff;box-shadow:0 20px 40px rgba(0,0,0,0.7);user-select:none;pointer-events:none}
 
-        .navbar {
-            background-color: black;
-            color: white;
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 60px;
-            display: flex;
-            justify-content: left;
-            align-items: center;
-            z-index: 1000;
-        }
+    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:#fff}
+    .nav-prev{left:8px}
+    .nav-next{right:8px}
+    .close-btn{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.4);width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 
-        .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 20px;
-            overflow: auto;
-            margin-top: 85px;
-        }
+    footer{position:fixed;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);padding:10px 14px;text-align:center;font-size:15px}
 
-        .gallery-item {
-            width: 100%;
-            height: 300px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            cursor: pointer;
-            box-shadow: 0 0 14px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        /* Transparent overlay to block right-clicks */
-        .gallery-item::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: 2;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2000;
-            width: 80%;
-            max-width: 800px;
-        }
-
-        .popup-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .popup img {
-            max-width: 100%;
-            max-height: 100%;
-            border: 5px solid #fff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            color: white;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 40%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .footer-text {
-            font-size: 18px;
-        }
-
-        @media screen and (max-width: 768px) {
-            .gallery-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .gallery-container {
-                grid-template-columns: 1fr;
-            }
-
-            .urban {
-                font-size: 20px;
-            }
-
-            .location-year {
-                font-size: 12px;
-            }
-        }
-    </style>
+    /* responsive */
+    @media (max-width:900px){.gallery{grid-template-columns:repeat(2,1fr)}.gallery-item{height:200px}}
+    @media (max-width:480px){.gallery{grid-template-columns:1fr}.urban{font-size:18px}.location-year{font-size:12px}.gallery-item{height:180px}}
+  </style>
 </head>
-
 <body>
-    <div class="navbar">
-        <div class="title">
-            <span class="urban">URBAN DESIGN</span>
-            <span class="location-year">Thripunithura 2017</span>
-        </div>
+  <header class="navbar">
+    <div class="title">
+      <span class="urban">URBAN DESIGN</span>
+      <span class="location-year">Thripunithura 2017</span>
     </div>
+  </header>
 
-    <!-- Popup Viewer -->
-    <div class="popup" id="popup">
-        <span class="close-button" onclick="closePopup()">X</span>
-        <div class="popup-content">
-            <img id="popup-image" src="" alt="Popup Image">
-        </div>
+  <main class="gallery-wrap">
+    <div id="gallery" class="gallery" aria-live="polite"></div>
+  </main>
+
+  <!-- POPUP VIEWER -->
+  <div id="popup" class="popup" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="popup-content">
+      <button class="close-btn" id="closeBtn" aria-label="Close (Esc)">✕</button>
+      <button class="nav-btn nav-prev" id="prevBtn" aria-label="Previous (Left)">◀</button>
+      <img id="popupImage" class="popup-image" src="" alt="Expanded view">
+      <button class="nav-btn nav-next" id="nextBtn" aria-label="Next (Right)">▶</button>
     </div>
+  </div>
 
-    <!-- GALLERY -->
-    <div class="gallery-container">
-        <div class="gallery-item" style="background-image: url('UD%201.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%202.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%203.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%204.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%205.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%206.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%207.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%208.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%209.jpg');"></div>
-        <div class="gallery-item" style="background-image: url('UD%2010.jpg');"></div>
-        <!-- Continue with your remaining images -->
-    </div>
+  <footer>meera ramesh | © B.Arch RIT 2013-18</footer>
 
-    <footer class="footer">
-        <span class="footer-text">meera ramesh | © B.Arch RIT 2013-18</span>
-    </footer>
+  <script>
+    (function(){
+      const TOTAL = 53; // as requested
+      const gallery = document.getElementById('gallery');
+      // Build gallery items programmatically
+      for(let i=1;i<=TOTAL;i++){
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.dataset.index = i-1;
 
-    <script>
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        const popup = document.getElementById('popup');
-        const popupImage = document.getElementById('popup-image');
-        let currentImageIndex = 0;
+        // Use simple filename pattern UD1.jpg ... UD53.jpg
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = `Urban Design ${i}`;
+        img.src = `UD${i}.jpg`;
+        img.decoding = 'async';
 
-        // Open popup on click
-        galleryItems.forEach((item, index) => {
-            item.addEventListener('click', () => {
-                currentImageIndex = index;
-                const imageSrc = item.style.backgroundImage.slice(5, -2); // extract URL
-                popupImage.src = imageSrc;
-                popup.style.display = 'flex';
-            });
+        const overlay = document.createElement('a');
+        overlay.className = 'click-overlay';
+        overlay.href = '#';
+        overlay.addEventListener('click', (e)=>{
+          e.preventDefault();
+          openPopup(parseInt(item.dataset.index,10));
         });
+        // Prevent context menu on overlay
+        overlay.addEventListener('contextmenu', e=>e.preventDefault());
 
-        function closePopup() {
-            popup.style.display = 'none';
+        item.appendChild(img);
+        item.appendChild(overlay);
+        gallery.appendChild(item);
+      }
+
+      // Popup logic
+      const popup = document.getElementById('popup');
+      const popupImage = document.getElementById('popupImage');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const closeBtn = document.getElementById('closeBtn');
+      let current = 0;
+      const items = document.querySelectorAll('.gallery-item');
+      function openPopup(index){
+        current = index;
+        popupImage.src = `UD${current+1}.jpg`;
+        popup.classList.add('visible');
+        popup.setAttribute('aria-hidden','false');
+        // lock scroll
+        document.body.style.overflow = 'hidden';
+      }
+      function closePopup(){
+        popup.classList.remove('visible');
+        popup.setAttribute('aria-hidden','true');
+        popupImage.src = '';
+        document.body.style.overflow = '';
+      }
+      function showNext(){ current = (current+1) % items.length; popupImage.src = `UD${current+1}.jpg`; }
+      function showPrev(){ current = (current-1+items.length) % items.length; popupImage.src = `UD${current+1}.jpg`; }
+
+      // Buttons
+      nextBtn.addEventListener('click', showNext);
+      prevBtn.addEventListener('click', showPrev);
+      closeBtn.addEventListener('click', closePopup);
+
+      // Keyboard
+      document.addEventListener('keydown', (e)=>{
+        if(popup.classList.contains('visible')){
+          if(e.key === 'ArrowRight') { e.preventDefault(); showNext(); }
+          else if(e.key === 'ArrowLeft') { e.preventDefault(); showPrev(); }
+          else if(e.key === 'Escape') { e.preventDefault(); closePopup(); }
         }
+        // block common save / inspect combos
+        if((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) e.preventDefault();
+        if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i')) e.preventDefault();
+        if(e.key === 'F12') e.preventDefault();
+      });
 
-        // Keyboard navigation
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'ArrowLeft') prevImage();
-            else if (event.key === 'ArrowRight') nextImage();
+      // Global contextmenu prevent
+      document.addEventListener('contextmenu', e=>{
+        // allow long-press context on inputs if needed in future
+        e.preventDefault();
+      });
+
+      // Touch swipe support for popup
+      let touchStartX = 0; let touchEndX = 0; let isTouching = false;
+      popup.addEventListener('touchstart', (e)=>{
+        if(e.touches && e.touches.length === 1){ isTouching = true; touchStartX = e.touches[0].clientX; }
+      }, {passive:true});
+      popup.addEventListener('touchmove', (e)=>{
+        if(!isTouching) return; touchEndX = e.touches[0].clientX;
+      }, {passive:true});
+      popup.addEventListener('touchend', ()=>{
+        if(!isTouching) return; isTouching = false; const delta = touchEndX - touchStartX; if(Math.abs(delta) > 40){ if(delta < 0) showNext(); else showPrev(); }
+      });
+
+      // Click outside to close
+      popup.addEventListener('click', (e)=>{
+        if(e.target === popup) closePopup();
+      });
+
+      // Small accessibility: focus trap not implemented but close on Esc handled
+
+      // Preload small set around the current image for smoother nav
+      function preloadNearby(idx){
+        [idx-1, idx+1].forEach(i => {
+          const n = ((i + items.length) % items.length) + 1;
+          const im = new Image(); im.src = `UD${n}.jpg`;
         });
+      }
+      // Hook into image change
+      const observer = new MutationObserver(()=>{
+        preloadNearby(current);
+      });
+      observer.observe(popupImage,{attributes:true,attributeFilter:['src']});
 
-        function nextImage() {
-            currentImageIndex = (currentImageIndex + 1) % galleryItems.length;
-            const imageSrc = galleryItems[currentImageIndex].style.backgroundImage.slice(5, -2);
-            popupImage.src = imageSrc;
-        }
-
-        function prevImage() {
-            currentImageIndex = (currentImageIndex - 1 + galleryItems.length) % galleryItems.length;
-            const imageSrc = galleryItems[currentImageIndex].style.backgroundImage.slice(5, -2);
-            popupImage.src = imageSrc;
-        }
-
-        // Disable right-click and common save shortcuts
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', function(e) {
-            if (
-                (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) ||
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
-                (e.key === 'F12')
-            ) {
-                e.preventDefault();
-            }
-        });
-    </script>
+      // Optional: in case images are served from a different folder, instruct user in console
+      console.info('Gallery loaded. Ensure UD1.jpg ... UD53.jpg are in same folder as this HTML file.');
+    })();
+  </script>
 </body>
 </html>
