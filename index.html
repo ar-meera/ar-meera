@@ -1,246 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meera Urban Design</title>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Century Gothic", sans-serif;
-    background-color: #111;
-    color: #fff;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meera Urban Design</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Century Gothic", sans-serif;
+        }
 
-/* Navbar */
-.navbar {
-    background-color: black;
-    color: white;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    z-index: 1000;
-}
-.title {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-.urban {
-    font-size: 24px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-.location-year {
-    font-size: 14px;
-}
+        .title {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
-/* Gallery grid */
-.gallery-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-    margin-top: 85px;
-}
-.gallery-item {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    border-radius: 5px;
-}
-.gallery-item img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    display: block;
-    border-radius: 5px;
-}
+        .urban {
+            font-size: 24px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-right: 5px;
+        }
 
-/* Diagonal watermark */
-.gallery-item::before {
-    content: "© B.Arch RIT 2013-18";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-30deg);
-    font-weight: 700;
-    letter-spacing: 2px;
-    z-index: 1;
-    pointer-events: none;
-    white-space: nowrap;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.12);
-}
+        .location-year {
+            font-size: 14px;
+            font-weight: normal;
+        }
 
-/* Popup */
-.popup {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.95);
-    justify-content: center;
-    align-items: center;
-    cursor: zoom-out;
-}
-.popup img {
-    max-width: 95%;
-    max-height: 90%;
-    object-fit: contain;
-    pointer-events: none;
-    border-radius: 8px;
-}
-.popup::before {
-    content: "© B.Arch RIT 2013-18";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-30deg);
-    font-weight: 700;
-    letter-spacing: 2px;
-    white-space: nowrap;
-    text-transform: uppercase;
-    pointer-events: none;
-    color: rgba(255,255,255,0.15);
-}
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            z-index: 1000;
+        }
 
-/* Close button */
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    color: white;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 40%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    z-index: 5;
-}
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            overflow: auto;
+            margin-top: 85px;
+        }
 
-/* Footer */
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.5);
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-}
-.footer-text { font-size: 18px; }
+        .gallery-item {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            box-shadow: 0 0 14px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
 
-/* Responsive watermark */
-@media (max-width: 1024px){
-    .gallery-item::before { font-size: 20px; color: rgba(255,255,255,0.1); }
-    .popup::before { font-size: 28px; color: rgba(255,255,255,0.12); }
-}
-@media (max-width: 768px){
-    .gallery-item::before { font-size: 16px; color: rgba(255,255,255,0.08); }
-    .popup::before { font-size: 22px; color: rgba(255,255,255,0.1); }
-}
-@media (max-width: 480px){
-    .gallery-item::before { font-size: 12px; color: rgba(255,255,255,0.07); }
-    .popup::before { font-size: 18px; color: rgba(255,255,255,0.08); }
-    .urban { font-size: 20px; }
-    .location-year { font-size: 12px; }
-    .gallery-container { grid-template-columns: 1fr; }
-}
-@media (max-width: 768px){
-    .gallery-container { grid-template-columns: repeat(2,1fr); }
-}
-</style>
+        /* Transparent overlay to block right-clicks */
+        .gallery-item::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 2;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .popup-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup img {
+            max-width: 100%;
+            max-height: 100%;
+            border: 5px solid #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: white;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .footer-text {
+            font-size: 18px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .gallery-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .gallery-container {
+                grid-template-columns: 1fr;
+            }
+
+            .urban {
+                font-size: 20px;
+            }
+
+            .location-year {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-<div class="navbar">
-    <div class="title">
-        <span class="urban">URBAN DESIGN</span>
-        <span class="location-year">Thripunithura 2017</span>
+    <div class="navbar">
+        <div class="title">
+            <span class="urban">URBAN DESIGN</span>
+            <span class="location-year">Thripunithura 2017</span>
+        </div>
     </div>
-</div>
 
-<!-- Popup Viewer -->
-<div class="popup" id="popup">
-    <span class="close-button" onclick="closePopup()">X</span>
-    <img id="popup-image" src="" alt="Popup Image">
-</div>
+    <!-- Popup Viewer -->
+    <div class="popup" id="popup">
+        <span class="close-button" onclick="closePopup()">X</span>
+        <div class="popup-content">
+            <img id="popup-image" src="" alt="Popup Image">
+        </div>
+    </div>
 
-<!-- Gallery -->
-<div class="gallery-container">
-    <!-- Replace these image URLs with your 50 images -->
-    <div class="gallery-item"><img src="UD 1.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 2.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 3.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 4.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 5.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 6.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 7.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 8.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 9.jpg" alt=""></div>
-    <div class="gallery-item"><img src="UD 10.jpg" alt=""></div>
-    <!-- Add remaining images up to 50 -->
-</div>
+    <!-- GALLERY -->
+    <div class="gallery-container">
+        <div class="gallery-item" style="background-image: url('UD%201.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%202.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%203.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%204.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%205.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%206.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%207.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%208.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%209.jpg');"></div>
+        <div class="gallery-item" style="background-image: url('UD%2010.jpg');"></div>
+        <!-- Continue with your remaining images -->
+    </div>
 
-<footer class="footer">
-    <span class="footer-text">meera ramesh</span>
-</footer>
+    <footer class="footer">
+        <span class="footer-text">meera ramesh | © B.Arch RIT 2013-18</span>
+    </footer>
 
-<script>
-const galleryItems = document.querySelectorAll('.gallery-item img');
-const popup = document.getElementById('popup');
-const popupImage = document.getElementById('popup-image');
-let currentIndex = 0;
+    <script>
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const popup = document.getElementById('popup');
+        const popupImage = document.getElementById('popup-image');
+        let currentImageIndex = 0;
 
-galleryItems.forEach((img, index) => {
-    img.addEventListener('click', () => {
-        currentIndex = index;
-        popupImage.src = img.src;
-        popup.style.display = 'flex';
-    });
-});
+        // Open popup on click
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentImageIndex = index;
+                const imageSrc = item.style.backgroundImage.slice(5, -2); // extract URL
+                popupImage.src = imageSrc;
+                popup.style.display = 'flex';
+            });
+        });
 
-function closePopup(){
-    popup.style.display = 'none';
-}
-
-// Keyboard navigation
-document.addEventListener('keydown', (e) => {
-    if(popup.style.display === 'flex'){
-        if(e.key === 'ArrowRight'){
-            currentIndex = (currentIndex +1)%galleryItems.length;
-            popupImage.src = galleryItems[currentIndex].src;
+        function closePopup() {
+            popup.style.display = 'none';
         }
-        if(e.key === 'ArrowLeft'){
-            currentIndex = (currentIndex -1 + galleryItems.length)%galleryItems.length;
-            popupImage.src = galleryItems[currentIndex].src;
-        }
-        if(e.key === 'Escape'){
-            closePopup();
-        }
-    }
-});
 
-// Disable right-click & common save shortcuts
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', function(e){
-    if((e.ctrlKey && ['s','S','u','U'].includes(e.key)) ||
-       (e.ctrlKey && e.shiftKey && ['I','i'].includes(e.key)) ||
-       (e.key==='F12')) e.preventDefault();
-});
-</script>
+        // Keyboard navigation
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowLeft') prevImage();
+            else if (event.key === 'ArrowRight') nextImage();
+        });
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % galleryItems.length;
+            const imageSrc = galleryItems[currentImageIndex].style.backgroundImage.slice(5, -2);
+            popupImage.src = imageSrc;
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + galleryItems.length) % galleryItems.length;
+            const imageSrc = galleryItems[currentImageIndex].style.backgroundImage.slice(5, -2);
+            popupImage.src = imageSrc;
+        }
+
+        // Disable right-click and common save shortcuts
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (
+                (e.ctrlKey && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) ||
+                (e.key === 'F12')
+            ) {
+                e.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>
